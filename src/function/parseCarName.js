@@ -1,8 +1,8 @@
-function parseCarNames(input) {
+function parseCarName(input) {
   return input
     .split(',')
     .map((name) => name.trim())
     .filter((name) => name !== '');
 }
 
-export default parseCarNames;
+export default parseCarName;
