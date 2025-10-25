@@ -12,6 +12,7 @@ export const ERROR_MESSAGES = Object.freeze({
   CAR_NAME: Object.freeze({
     EMPTY: '[ERROR] 경주할 자동차 이름을 입력해주세요.',
     LENGTH_INVALID: '[ERROR] 자동차의 이름은 1자 이상 5자 이하로 입력 해야 합니다.',
+    DUPLICATE: '[ERROR] 자동차 이름은 중복될 수 없습니다.',
   }),
 
   ATTEMPT_COUNT: Object.freeze({

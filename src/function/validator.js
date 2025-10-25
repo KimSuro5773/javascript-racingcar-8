@@ -5,6 +5,10 @@ export function validateCarNames(carNameArray) {
     throw new Error(ERROR_MESSAGES.CAR_NAME.EMPTY);
   }
 
+  if (new Set(carNameArray).size !== carNameArray.length) {
+    throw new Error(ERROR_MESSAGES.CAR_NAME.DUPLICATE);
+  }
+
   carNameArray.forEach((carName) => {
     if (carName.length > 5) {
       throw new Error(ERROR_MESSAGES.CAR_NAME.LENGTH_INVALID);
