@@ -2,6 +2,10 @@ import { Random } from '@woowacourse/mission-utils';
 import Car from './Car.js';
 
 class RacingGame {
+  static RANDOM_MIN = 0;
+  static RANDOM_MAX = 9;
+  static MIN_RANDOM_TO_MOVE = 4;
+
   #cars;
 
   constructor(carNames) {
@@ -29,8 +33,8 @@ class RacingGame {
   }
 
   #canMove() {
-    const randomNumber = Random.pickNumberInRange(0, 9);
-    return randomNumber >= 4;
+    const randomNumber = Random.pickNumberInRange(RacingGame.RANDOM_MIN, RacingGame.RANDOM_MAX);
+    return randomNumber >= RacingGame.MIN_RANDOM_TO_MOVE;
   }
 }
 
