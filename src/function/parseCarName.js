@@ -1,5 +1,5 @@
-function parseCarName(input) {
-  return input
+function parseCarName(carNameString) {
+  return carNameString
     .split(',')
     .map((name) => name.trim())
     .filter((name) => name !== '');
