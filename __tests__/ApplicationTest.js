@@ -25,37 +25,145 @@ const getLogSpy = () => {
   return logSpy;
 };
 
-describe('자동차 경주', () => {
-  test('기능 테스트', async () => {
-    // given
-    const MOVING_FORWARD = 4;
-    const STOP = 3;
-    const inputs = ['pobi,woni', '1'];
-    const logs = ['pobi : -', 'woni : ', '최종 우승자 : pobi'];
-    const logSpy = getLogSpy();
+describe('자동차 경주 통합 테스트', () => {
+  describe('정상 동작 테스트', () => {
+    it('기본 기능 테스트', async () => {
+      // given
+      const MOVING_FORWARD = 4;
+      const STOP = 3;
+      const inputs = ['pobi,woni', '1'];
+      const logs = ['pobi : -', 'woni : ', '최종 우승자 : pobi'];
+      const logSpy = getLogSpy();
 
-    mockQuestions(inputs);
-    mockRandoms([MOVING_FORWARD, STOP]);
+      mockQuestions(inputs);
+      mockRandoms([MOVING_FORWARD, STOP]);
 
-    // when
-    const app = new App();
-    await app.run();
+      // when
+      const app = new App();
+      await app.run();
 
-    // then
-    logs.forEach((log) => {
-      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(log));
+      // then
+      logs.forEach((log) => {
+        expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(log));
+      });
+    });
+
+    it('공동 우승자가 있으면 모두 출력한다.', async () => {
+      // given
+      const MOVING_FORWARD = 4;
+      const inputs = ['pobi,woni', '2'];
+      const logSpy = getLogSpy();
+
+      mockQuestions(inputs);
+      mockRandoms([MOVING_FORWARD, MOVING_FORWARD, MOVING_FORWARD, MOVING_FORWARD]);
+
+      // when
+      const app = new App();
+      await app.run();
+
+      // then
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('pobi : --'));
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('woni : --'));
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('최종 우승자 : pobi, woni'));
+    });
+
+    it('자동차가 1대일 때 정상 동작한다.', async () => {
+      // given
+      const MOVING_FORWARD = 4;
+      const inputs = ['pobi', '1'];
+      const logSpy = getLogSpy();
+
+      mockQuestions(inputs);
+      mockRandoms([MOVING_FORWARD]);
+
+      // when
+      const app = new App();
+      await app.run();
+
+      // then
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('pobi : -'));
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('최종 우승자 : pobi'));
+    });
+
+    it('모든 자동차가 이동하지 않아도 우승자를 출력한다.', async () => {
+      // given
+      const STOP = 3;
+      const inputs = ['pobi,woni', '2'];
+      const logSpy = getLogSpy();
+
+      mockQuestions(inputs);
+      mockRandoms([STOP, STOP, STOP, STOP]);
+
+      // when
+      const app = new App();
+      await app.run();
+
+      // then
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('pobi : '));
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('woni : '));
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('최종 우승자 : pobi, woni'));
     });
   });
 
-  test('예외 테스트', async () => {
-    // given
-    const inputs = ['pobi,javaji'];
-    mockQuestions(inputs);
+  describe('예외 테스트', () => {
+    it('자동차 이름이 5자를 초과하면 예외가 발생한다.', async () => {
+      // given
+      const inputs = ['pobi,kimsuro'];
+      mockQuestions(inputs);
 
-    // when
-    const app = new App();
+      // when
+      const app = new App();
 
-    // then
-    await expect(app.run()).rejects.toThrow('[ERROR]');
+      // then
+      await expect(app.run()).rejects.toThrow('[ERROR]');
+    });
+
+    it('자동차 이름이 빈 문자열이면 예외가 발생한다.', async () => {
+      // given
+      const inputs = [''];
+      mockQuestions(inputs);
+
+      // when
+      const app = new App();
+
+      // then
+      await expect(app.run()).rejects.toThrow('[ERROR]');
+    });
+
+    it('자동차 이름에 중복이 있으면 예외가 발생한다.', async () => {
+      // given
+      const inputs = ['pobi,pobi'];
+      mockQuestions(inputs);
+
+      // when
+      const app = new App();
+
+      // then
+      await expect(app.run()).rejects.toThrow('[ERROR]');
+    });
+
+    it('시도 횟수가 숫자가 아니면 예외가 발생한다.', async () => {
+      // given
+      const inputs = ['pobi,woni', 'abc'];
+      mockQuestions(inputs);
+
+      // when
+      const app = new App();
+
+      // then
+      await expect(app.run()).rejects.toThrow('[ERROR]');
+    });
+
+    it('시도 횟수가 0이면 예외가 발생한다.', async () => {
+      // given
+      const inputs = ['pobi,woni', '0'];
+      mockQuestions(inputs);
+
+      // when
+      const app = new App();
+
+      // then
+      await expect(app.run()).rejects.toThrow('[ERROR]');
+    });
   });
 });
