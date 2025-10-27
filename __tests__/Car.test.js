@@ -24,7 +24,7 @@ describe('Car 클래스 테스트', () => {
     expect(car.getPosition()).toBe(0);
   });
 
-  it('무작위 값이 4 이상일 경우 move() 호출 시 위치가 1 증가한다.', () => {
+  it('무작위 값이 4 이상일 경우 tryMove() 호출 시 위치가 1 증가한다.', () => {
     mockRandoms([4]);
 
     car.tryMove();
@@ -32,7 +32,7 @@ describe('Car 클래스 테스트', () => {
     expect(car.getPosition()).toBe(1);
   });
 
-  it('무작위 값이 4 미만일 경우 move() 호출 시 위치가 증가하지 않는다.', () => {
+  it('무작위 값이 4 미만일 경우 tryMove() 호출 시 위치가 증가하지 않는다.', () => {
     mockRandoms([3]);
 
     car.tryMove();
@@ -40,7 +40,7 @@ describe('Car 클래스 테스트', () => {
     expect(car.getPosition()).toBe(0);
   });
 
-  it('무작위 값에 따라 move()를 여러 번 호출하면 조건을 만족할 때만 위치가 증가한다.', () => {
+  it('무작위 값에 따라 tryMove()를 여러 번 호출하면 조건을 만족할 때만 위치가 증가한다.', () => {
     mockRandoms([4, 3, 5]); // 이동, 정지, 이동
 
     car.tryMove();
